@@ -19,12 +19,12 @@ window.addEventListener('DOMContentLoaded', function () {
         if (tabContent[b].classList.contains('hide')) {
             tabContent[b].classList.add('show');
             tabContent[b].classList.remove('hide');
-        }
-    }
+        };
+    };
 
     info.addEventListener('click', function (event) {
         let target = event.target;
-        if (target && target.classList.contains('.info-header-tab')) {
+        if (target && target.classList.contains('info-header-tab')) {
             for (let i = 0; i < tab.length; i++) {
                 if (target == tab[i]) {
                     hideTabContent(0);
@@ -36,7 +36,7 @@ window.addEventListener('DOMContentLoaded', function () {
     });
 
 
-    // Timer
+    // // Timer
     let d = new Date(), //Для установки текущей даты + 2 дня
         deadLine = d.getFullYear() + "-" + (d.getMonth() + 1) + "-" + (d.getDate() + 2);
     // let deadLine = '2018-12-26';
@@ -46,22 +46,12 @@ window.addEventListener('DOMContentLoaded', function () {
             seconds = Math.floor((t / 1000) % 60),
             minutes = Math.floor((t / 1000 / 60) % 60),
             hours = Math.floor(t / 1000 / 60 / 60);
-
-        // if (seconds < 0) {
-        //     return {
-        //         'total': 0,
-        //         'hours': 0,
-        //         'minutes': 0,
-        //         'seconds': 0
-        //     }
-        // } else {
-            return {
-                'total': t,
-                'hours': hours,
-                'minutes': minutes,
-                'seconds': seconds
-            };
-        // }
+        return {
+            'total': t,
+            'hours': hours,
+           'minutes': minutes,
+            'seconds': seconds
+        };
     };
 
     function setClock(id, endtime) {
@@ -73,22 +63,19 @@ window.addEventListener('DOMContentLoaded', function () {
 
         function updateClock() {
             let t = getTimeRemaining(endtime);
-            if (t.hours > 9) {
-                hours.textContent = t.hours;
-            } else {
-                    hours.textContent = '0' + t.hours;  
-            };
+            function addZero(number) {
+                
+                if (number > 9) {
+                    return number;
+                } else {
+                    return '0' + number;
+                }
+            }
+
+            hours.textContent = addZero(t.hours);
+            minutes.textContent = addZero(t.minutes);
+            seconds.textContent = addZero(t.seconds);
             
-            if (t.minutes > 9) {
-                minutes.textContent = t.minutes;
-            } else {
-                minutes.textContent = '0' + t.minutes;
-            }
-            if (t.seconds > 9)  {
-                seconds.textContent = t.seconds;
-            } else {
-                seconds.textContent = '0' + t.seconds;
-            }
 
             if (t.total <= 0) {
                 clearInterval(timeInterval);
@@ -98,7 +85,32 @@ window.addEventListener('DOMContentLoaded', function () {
             }
         }
     }
-
     setClock('timer', deadLine);
+
+    // Modal
+    let more = document.querySelector('.more'),
+        overlay = document.querySelector('.overlay'),
+        close = document.querySelector('.popup-close');
+
+    more.addEventListener('click', function() {
+        overlay.style.display = 'block';
+        this.classList.add('more-splash');
+        document.body.style.overflow = 'hidden';
+    });
+    close.addEventListener('click', function() {
+        overlay.style.display = 'none';
+        more.classList.remove('more-splash');
+        document.body.style.overflow = '';
+    });
+
+
+    // Привязка кнопок Узнать подробнее в табах
+    let wholeTabContent = document.querySelector('.info');
+    wholeTabContent.addEventListener('click', function(event) {
+        let target = event.target;
+        if (target && target.classList.contains('description-btn')) {
+            more.click();
+        }
+    });
 
 });
