@@ -1,1 +1,3 @@
 # Yoga
+
+Whole site template
