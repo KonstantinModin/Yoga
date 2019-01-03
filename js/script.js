@@ -37,19 +37,19 @@ window.addEventListener('DOMContentLoaded', function () {
 
 
     // // Timer
-    let d = new Date(), //Для установки текущей даты + 2 дня
-        deadLine = d.getFullYear() + "-" + (d.getMonth() + 1) + "-" + (d.getDate() + 2);
     // let deadLine = '2018-12-26';
-
+    let d = new Date(),
+        deadLine = d.setDate(d.getDate() + 1);
+    
     function getTimeRemaining(endtime) {
-        let t = Date.parse(endtime) - Date.parse(new Date()),
+        let t = endtime - Date.parse(new Date()),
             seconds = Math.floor((t / 1000) % 60),
             minutes = Math.floor((t / 1000 / 60) % 60),
             hours = Math.floor(t / 1000 / 60 / 60);
         return {
             'total': t,
             'hours': hours,
-           'minutes': minutes,
+            'minutes': minutes,
             'seconds': seconds
         };
     };
@@ -76,7 +76,6 @@ window.addEventListener('DOMContentLoaded', function () {
             minutes.textContent = addZero(t.minutes);
             seconds.textContent = addZero(t.seconds);
             
-
             if (t.total <= 0) {
                 clearInterval(timeInterval);
                 hours.textContent = '00';
@@ -103,7 +102,6 @@ window.addEventListener('DOMContentLoaded', function () {
         document.body.style.overflow = '';
     });
 
-
     // Привязка кнопок Узнать подробнее в табах
     let wholeTabContent = document.querySelector('.info');
     wholeTabContent.addEventListener('click', function(event) {
@@ -112,5 +110,86 @@ window.addEventListener('DOMContentLoaded', function () {
             more.click();
         }
     });
+
+    //Modal window request
+    let message = {
+        loading: 'Loading is in process...',
+        success: 'Спасибо! Скоро мы с вами свяжемся!',
+        failure: 'Что-то пошло не так...'
+    };
+
+    let form = document.querySelector('.main-form'),
+        input = form.getElementsByTagName('input'),
+        statusMessage = document.createElement('div');
+    statusMessage.classList.add('status');
+    statusMessage.style.color = 'white';
+
+    form.addEventListener('submit', function(event) {
+        event.preventDefault();
+        form.appendChild(statusMessage);
+
+        let request = new XMLHttpRequest();
+        request.open('POST', 'server.php');
+        request.setRequestHeader('Content-Type', 'application/json; charset=utf-8');
+
+        let formData = new FormData(form),
+            obj = {};
+        formData.forEach(function(value, key) {
+            obj[key] = value;
+        });
+        let json = JSON.stringify(obj);
+        
+        request.send(json);
+
+        request.addEventListener('readystatechange', function() {
+            if (request.readyState < 4) {
+                statusMessage.innerHTML = message.loading;
+            } else if (request.readyState === 4 && request.status == 200) {
+                statusMessage.innerHTML = message.success;                
+            } else {
+                statusMessage.innerHTML = message.failure;
+            }
+        });
+        for (let i = 0; i < input.length; i++) {
+            input[i].value = '';
+        }
+    });
+
+     //Contact form request
+    let contactForm = document.querySelector('#form'),
+        contactInput = contactForm.getElementsByTagName('input');
+        
+    contactForm.addEventListener('submit', function(event) {
+        event.preventDefault();
+        contactForm.appendChild(statusMessage);
+
+        let request = new XMLHttpRequest();
+        request.open('POST', 'server.php');
+        request.setRequestHeader('Content-Type', 'application/json; charset=utf-8');
+
+        let formData = new FormData(contactForm),
+            obj = {};
+        formData.forEach(function(value, key) {
+            obj[key] = value;
+        });
+        let json = JSON.stringify(obj);
+        
+        request.send(json);
+
+        request.addEventListener('readystatechange', function() {
+            if (request.readyState < 4) {
+                statusMessage.innerHTML = message.loading;
+            } else if (request.readyState === 4 && request.status == 200) {
+                statusMessage.innerHTML = message.success;                
+            } else {
+                statusMessage.innerHTML = message.failure;
+            }
+        });
+        for (let i = 0; i < contactInput.length; i++) {
+            contactInput[i].value = '';
+        }
+    });
+
+
 
 });
