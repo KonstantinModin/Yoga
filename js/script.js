@@ -173,4 +173,44 @@ window.addEventListener('DOMContentLoaded', function () {
     }
     sendForm(form);
     sendForm(contactForm); 
+
+    // slider
+
+    let slideIndex = 1,
+        slides = document.querySelectorAll('.slider-item'),
+        prev = document.querySelector('.prev'),
+        next = document.querySelector('.next'),
+        dotsWrap = document.querySelector('.slider-dots'),
+        dots = document.querySelectorAll('.dot');
+
+    function showSlide(n) {
+        if (n < 1) {slideIndex = slides.length;}
+        if (n > slides.length) {slideIndex = 1;}
+
+        slides.forEach(slide => slide.style.display = 'none');
+        dots.forEach(dot => dot.classList.remove('dot-active'));
+        
+        slides[slideIndex - 1].style.display = 'block';
+        dots[slideIndex - 1].classList.add('dot-active');
+    }
+    showSlide(1);
+    
+    function plusSlide(n) {
+        showSlide(slideIndex += n);
+    }
+
+    function currentSlide(n) {
+        showSlide(slideIndex = n);
+    }
+    
+    prev.addEventListener('click', () => plusSlide(-1));
+    next.addEventListener('click', () => plusSlide(1));
+
+    dotsWrap.addEventListener('click', (event) => {
+        for (let i = 0; i < dots.length + 1; i++) {
+            if (event.target.classList.contains('dot') && event.target == dots[i]) {
+                currentSlide(i + 1);
+            }
+        }     
+    });
 });
