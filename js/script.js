@@ -213,4 +213,51 @@ window.addEventListener('DOMContentLoaded', function () {
             }
         }     
     });
+
+    // Calc
+
+    let persons = document.querySelectorAll('.counter-block-input')[0],
+        restDays = document.querySelectorAll('.counter-block-input')[1],
+        place = document.getElementById('select'),
+        totalValue = document.getElementById('total'),
+        personsSum = 0,
+        daysSum = 0,
+        total = 0;
+    totalValue.innerHTML = 0;
+
+    persons.addEventListener('input', function() {
+        personsSum = +this.value;
+        total = daysSum * personsSum * 1000 * place.options[place.selectedIndex].value;
+        
+        if (restDays.value == '') {
+            totalValue.innerHTML = 0;
+        } else {
+            totalValue.innerHTML = total;
+        }
+    });
+
+    restDays.addEventListener('input', function() {
+        daysSum = +this.value;
+        total = daysSum * personsSum * 1000 * place.options[place.selectedIndex].value;
+        
+        if (persons.value == '') {
+            totalValue.innerHTML = 0;
+        } else {
+            totalValue.innerHTML = total;
+        }
+    });
+    
+    place.addEventListener('change', function() {
+        total = daysSum * personsSum * 1000 * this.options[this.selectedIndex].value;
+        
+        if (persons.value == '' || restDays.value == '') {
+            totalValue.innerHTML = 0;
+        } else {
+            totalValue.innerHTML = total;
+        }
+    });
+
+
+
+
 });
