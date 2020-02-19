@@ -121,8 +121,7 @@ window.addEventListener('DOMContentLoaded', function () {
     let form = document.querySelector('.main-form'),
         input = document.getElementsByTagName('input'),
         statusMessage = document.createElement('div'),
-        contactForm = document.querySelector('#form');
-        
+        contactForm = document.querySelector('#form');        
 
     statusMessage.classList.add('status');
     statusMessage.style.color = 'white';
@@ -175,7 +174,6 @@ window.addEventListener('DOMContentLoaded', function () {
     sendForm(contactForm); 
 
     // slider
-
     let slideIndex = 1,
         slides = document.querySelectorAll('.slider-item'),
         prev = document.querySelector('.prev'),
@@ -256,8 +254,4 @@ window.addEventListener('DOMContentLoaded', function () {
             totalValue.innerHTML = total;
         }
     });
-
-
-
-
 });
